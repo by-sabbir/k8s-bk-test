@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: bk-app
+  name: bk-app
+spec:
+  replicas: 10
+  selector:
+    matchLabels:
+      app: bk-app
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 0
+      maxUnavailable: 20%
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: bk-app
+    spec:
+      containers:
+      - image: registry.sabbir.dev/bk-rest-app
+        name: bk-rest-app
+        imagePullPolicy: Always
+        livenessProbe:
+          httpGet:
+            path: /healthcheck
+            port: 8888
+        readinessProbe:
+          httpGet:
+            path: /healthcheck
+            port: 8888
+          initialDelaySeconds: 3
+          timeoutSeconds: 1
+        ports:
+        - containerPort: 8888
+        envFrom:
+        - configMapRef:
+            name: bk-app-config
+      imagePullSecrets:
+      - name: registry.sabbir.dev

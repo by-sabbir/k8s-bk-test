@@ -1,0 +1,15 @@
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: bk-app-config
+  labels:
+    app: bk-app-config
+data:
+  DB_HOST: <postgres svc IP>
+  DB_PORT: <postgres port>
+  DB_USERNAME: <username>
+  DB_PASSWORD: <password>
+  DB_NAME: <db-name>
+  SSL_MODE: <specific for sqlx>
+  JWT_SECRET: <jwt-secret>
