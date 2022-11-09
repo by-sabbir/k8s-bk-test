@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: dev-user-token
+  annotations:
+    kubernetes.io/service-account.name: dev
+type: kubernetes.io/service-account-token
