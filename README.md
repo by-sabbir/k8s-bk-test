@@ -49,9 +49,13 @@ k apply -f metrics-server/metrics-server.yaml
   - verify with `k get cm`
 - Create docker registry secret
   - Here I have used my [private registry](registry.sabbir.dev), so the `dockerconfigjson` was omitted. You can use any public registry or private ones.
-    - Login to your target registry
-    - Generate base64 string with `cat ~/.docker/config.json | base64`
-    - Update the `.dockerconfigjson:` field in `bk-rest-app/secret-priv-registry.yaml` with the generated base64 string and run
-    `k apply -f bk-rest-app/secret-priv-registry.yaml`
-  
-    
+    - Generate and create the docker-registry secret with imperative command
+      `k create secret docker-registry registry.sabbir.dev --docker-username=<username> --docker-password=<password> --docker-server=registry.sabbir.dev --dry-run=client -o yaml`
+    - Replace `<username>` and `<password>` with the target registry credential.
+- Deploy App 
+  `k apply -f bk-rest-app/bk-app-deployment.yaml`
+  verify with- `kp --watch`
+
+- Expose application globally
+  - Edit the `externalIPs` and `annotations` then run-
+  `k apply -f bk-rest-app/bk-svc.yaml`
