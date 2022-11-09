@@ -72,7 +72,7 @@ k apply -f metrics-server/metrics-server.yaml
     - Generate and create the docker-registry secret with imperative command
 
       ```bash
-        `k create secret docker-registry registry.sabbir.dev --docker-username=<username> --docker-password=<password> --docker-server=registry.sabbir.dev --dry-run=client -o yaml`
+        k create secret docker-registry registry.sabbir.dev --docker-username=<username> --docker-password=<password> --docker-server=registry.sabbir.dev --dry-run=client -o yaml
       ```
 
     - Replace `<username>` and `<password>` with the target registry credential.
