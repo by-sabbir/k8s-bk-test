@@ -17,6 +17,15 @@ spec:
       - name: postgres
         image: postgres:14
         imagePullPolicy: "IfNotPresent"
+        livenessProbe:
+          exec:
+            command:
+            - pg_isready
+        readinessProbe:
+          tcpSocket:
+            port: 5432
+          initialDelaySeconds: 5
+          periodSeconds: 10
         ports:
         - containerPort: 5432
         envFrom:
