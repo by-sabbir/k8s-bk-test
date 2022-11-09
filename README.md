@@ -38,4 +38,20 @@ k apply -f metrics-server/metrics-server.yaml
 
 ### Step 3: Configure External DNS (CloudFlare)
 
--
+- We need to get CloudFlare API KEY and Email
+- Update the `env` at `dns/external-dns.yaml` then
+  `k apply -f dns/external-dns.yaml`
+  - verify with `kp --watch`
+
+### Step 4: Deploy the `bk-app`
+- Update the ConfigMap for postgres and application specific env vars at `bk-rest-app/bk-app-config.yaml`
+  `k apply -f bk-rest-app/bk-app-config.yaml`
+  - verify with `k get cm`
+- Create docker registry secret
+  - Here I have used my [private registry](registry.sabbir.dev), so the `dockerconfigjson` was omitted. You can use any public registry or private ones.
+    - Login to your target registry
+    - Generate base64 string with `cat ~/.docker/config.json | base64`
+    - Update the `.dockerconfigjson:` field in `bk-rest-app/secret-priv-registry.yaml` with the generated base64 string and run
+    `k apply -f bk-rest-app/secret-priv-registry.yaml`
+  
+    
