@@ -26,36 +26,67 @@ k apply -f metrics-server/metrics-server.yaml
 
 - Create ConfigMap for Postgres service
   - Update the `data` parameter at `postgres/postgres-config.yaml` then apply
-  `k apply -f postgres/postgres-config.yaml`
+  
+  ```bash
+    `k apply -f postgres/postgres-config.yaml`
+  ```
 
 - Deploy Postgres
-  `k apply -f postgres/postgres-deployment.yaml`
+  
+  ```bash
+    `k apply -f postgres/postgres-deployment.yaml`
+  ```
+
   - watch the process with `kp --watch`
 
 - Expose Postgres within Nodes
-  `k apply -f postgres/postgres-service.yaml`
+  
+  ```bash
+    `k apply -f postgres/postgres-service.yaml`
+  ```
+
   - verify with `ks`
 
 ### Step 3: Configure External DNS (CloudFlare)
 
 - We need to get CloudFlare API KEY and Email
 - Update the `env` at `dns/external-dns.yaml` then
-  `k apply -f dns/external-dns.yaml`
+
+  ```bash
+    `k apply -f dns/external-dns.yaml`
+  ```
+
   - verify with `kp --watch`
 
 ### Step 4: Deploy the `bk-app`
+
 - Update the ConfigMap for postgres and application specific env vars at `bk-rest-app/bk-app-config.yaml`
-  `k apply -f bk-rest-app/bk-app-config.yaml`
+
+  ```bash
+    `k apply -f bk-rest-app/bk-app-config.yaml`
+    ```
+
   - verify with `k get cm`
 - Create docker registry secret
   - Here I have used my [private registry](registry.sabbir.dev), so the `dockerconfigjson` was omitted. You can use any public registry or private ones.
     - Generate and create the docker-registry secret with imperative command
-      `k create secret docker-registry registry.sabbir.dev --docker-username=<username> --docker-password=<password> --docker-server=registry.sabbir.dev --dry-run=client -o yaml`
+
+      ```bash
+        `k create secret docker-registry registry.sabbir.dev --docker-username=<username> --docker-password=<password> --docker-server=registry.sabbir.dev --dry-run=client -o yaml`
+      ```
+
     - Replace `<username>` and `<password>` with the target registry credential.
-- Deploy App 
-  `k apply -f bk-rest-app/bk-app-deployment.yaml`
+- Deploy App
+
+  ```bash
+    `k apply -f bk-rest-app/bk-app-deployment.yaml`
+  ```
+
   verify with- `kp --watch`
 
 - Expose application globally
   - Edit the `externalIPs` and `annotations` then run-
-  `k apply -f bk-rest-app/bk-svc.yaml`
+
+  ```bash
+    `k apply -f bk-rest-app/bk-svc.yaml`
+  ```
